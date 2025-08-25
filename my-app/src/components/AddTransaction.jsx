@@ -8,19 +8,12 @@ import {
   Typography,
   Box,
   Paper,
-  Alert,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  Chip,
-  Divider
+  Alert
 } from '@mui/material'
-import { Add } from '@mui/icons-material'
 
 function AddTransaction() {
   const dispatch = useDispatch()
-  const [alert, setAlert] = useState({ show: false, message: '', severity: 'success' })
+  const [message, setMessage] = useState('')
   
   const { control, handleSubmit, reset, formState: { errors } } = useForm({
     defaultValues: {
@@ -48,32 +41,24 @@ function AddTransaction() {
       date: new Date().toISOString().split('T')[0]
     })
 
-    setAlert({ show: true, message: 'Transaction added!', severity: 'success' })
-    setTimeout(() => setAlert({ show: false, message: '', severity: 'success' }), 3000)
+    setMessage('Transaction added successfully!')
+    setTimeout(() => setMessage(''), 3000)
   }
 
   return (
-    <Paper sx={{ p: 3, mb: 3 }}>
-      <Box display="flex" alignItems="center" gap={2} mb={2}>
-        <Typography variant="h5">
-          Add Transaction
-        </Typography>
-        <Chip 
-          label="New" 
-          color="primary" 
-          size="small"
-        />
-      </Box>
+    <Box sx={{maxWidth:400,mx:'auto',width:'100%'}}>
+    <Paper elevation={10} sx={{ p: 3 }}>
+      <Typography variant="h5" gutterBottom>
+        Add Transaction
+      </Typography>
       
-      <Divider sx={{ mb: 2 }} />
-      
-      {alert.show && (
-        <Alert severity={alert.severity} sx={{ mb: 2 }}>
-          {alert.message}
+      {message && (
+        <Alert severity="success" sx={{ mt: 2 }}>
+          {message}
         </Alert>
       )}
       
-      <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+      <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
         <Controller
           name="title"
           control={control}
@@ -114,22 +99,18 @@ function AddTransaction() {
           name="category"
           control={control}
           render={({ field }) => (
-            <FormControl fullWidth>
-              <InputLabel>Category</InputLabel>
-              <Select {...field} label="Category">
-                {categories.map(category => (
-                  <MenuItem key={category} value={category}>
-                    <Chip 
-                      label={category} 
-                      size="small" 
-                      variant="outlined"
-                      sx={{ mr: 1 }}
-                    />
-                    {category}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <TextField
+              {...field}
+              select
+              label="Category"
+              fullWidth
+            >
+              {categories.map(category => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </TextField>
           )}
         />
 
@@ -147,18 +128,17 @@ function AddTransaction() {
           )}
         />
 
-        <Divider />
-
         <Button
           type="submit"
           variant="contained"
-          startIcon={<Add />}
           size="large"
+          fullWidth
         >
           Add Transaction
         </Button>
       </Box>
     </Paper>
+    </Box>
   )
 }
 

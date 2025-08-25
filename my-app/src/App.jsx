@@ -1,7 +1,11 @@
-import Layout from './components/Layout'
+import AddTransaction from './components/AddTransaction'
 
 function App() {
-  return <Layout />
+  return (
+    <div>
+      <AddTransaction />
+    </div>
+  )
 }
 
 export default App
