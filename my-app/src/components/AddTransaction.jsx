@@ -46,7 +46,8 @@ function AddTransaction() {
   }
 
   return (
-    <Box sx={{maxWidth:400,mx:'auto',width:'100%'}}>
+    <Box sx={{maxWidth:500,mx:'auto',width:'100%', mb: 4}}>
+      <h1 style={{textAlign:'center', marginBottom:'30px', color:'#1976d2'}}>💰 Expense Tracker</h1>
     <Paper elevation={10} sx={{ p: 3 }}>
       <Typography variant="h5" gutterBottom>
         Add Transaction
@@ -100,11 +101,16 @@ function AddTransaction() {
           control={control}
           render={({ field }) => (
             <TextField
-
+              {...field}
+              select
               label="Category"
               fullWidth
             >
-  
+              {['Food', 'Travel', 'Shopping', 'Bills', 'Salary', 'Other'].map(category => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
             </TextField>
           )}
         />
