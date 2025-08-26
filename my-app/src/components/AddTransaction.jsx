@@ -24,7 +24,7 @@ function AddTransaction() {
     }
   })
 
-  const categories = ['Food', 'Travel', 'Shopping', 'Bills', 'Salary', 'Other']
+ 
 
   const onSubmit = (data) => {
     dispatch(addTransaction({
@@ -100,16 +100,11 @@ function AddTransaction() {
           control={control}
           render={({ field }) => (
             <TextField
-              {...field}
-              select
+
               label="Category"
               fullWidth
             >
-              {categories.map(category => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              ))}
+  
             </TextField>
           )}
         />
