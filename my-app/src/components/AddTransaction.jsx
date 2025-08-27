@@ -1,21 +1,37 @@
-import { useState } from 'react'
-import { useForm, Controller } from 'react-hook-form'
-import { useDispatch } from 'react-redux'
-import { addTransaction } from '../store/transactionSlice'
+import { Typography, Box, Button ,Paper ,Fade,  InputAdornment, Alert,TextField, Drawer, IconButton} from '@mui/material'
 import {
-  TextField,
-  Button,
-  Typography,
-  Box,
-  Paper,
-  Alert
-} from '@mui/material'
+  AttachMoney,
+  Category,
+  Title,
+  CalendarToday,
+  Menu,
+  Close
+} from '@mui/icons-material'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useDispatch, useSelector } from 'react-redux'
+import { addTransaction } from '../store/transactionSlice'
 
 function AddTransaction() {
   const dispatch = useDispatch()
+  const transactions = useSelector(state => state.transactions.transactions)
   const [message, setMessage] = useState('')
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+
+  let totalIncome = 0
+  let totalExpense = 0
+
+  for (const transaction of transactions) {
+    if (transaction.amount > 0) {
+      totalIncome += transaction.amount
+    } else if (transaction.amount < 0) {
+      totalExpense += Math.abs(transaction.amount)
+    }
+  }
+
+  const netBalance = totalIncome - totalExpense
   
-  const { control, handleSubmit, reset, formState: { errors } } = useForm({
+  const { register, handleSubmit, reset, formState: { errors } } = useForm({
     defaultValues: {
       title: '',
       amount: '',
@@ -23,8 +39,6 @@ function AddTransaction() {
       date: new Date().toISOString().split('T')[0]
     }
   })
-
- 
 
   const onSubmit = (data) => {
     dispatch(addTransaction({
@@ -46,100 +60,263 @@ function AddTransaction() {
   }
 
   return (
-    <Box sx={{maxWidth:500,mx:'auto',width:'100%', mb: 4}}>
-      <h1 style={{textAlign:'center', marginBottom:'30px', color:'#1976d2'}}>💰 Expense Tracker</h1>
-    <Paper elevation={10} sx={{ p: 3 }}>
-      <Typography variant="h5" gutterBottom>
-        Add Transaction
+    <>
+    
+<IconButton
+  onClick={() => setSidebarOpen(true)}
+  sx={{
+    mt:1,
+    backgroundColor: '#2d41f7ff',
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '& .MuiSvgIcon-root': {
+      fontSize: '2rem',
+    },
+  }}
+>
+  <Menu />
+</IconButton>
+
+    
+      <Drawer
+        
+        open={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        sx={{
+
+          '& .MuiDrawer-paper': {
+            width: 300,
+           
+            backgroundColor: '#f5f5f5',
+            borderRadius: '10px'
+          }
+        }}
+      >
+        <Box sx={{ p: 3 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+            <Typography variant="h5" sx={{ fontWeight: 600, color: '#1976d2' }}>
+              📊 Quick Info
+            </Typography>
+            <IconButton onClick={() => setSidebarOpen(false)}>
+              <Close />
+            </IconButton>
+          </Box>
+
+          <Paper elevation={9} sx={{ p: 2, mb: 2, borderRadius: 2, backgroundColor: '#e8f5e8' }}>
+            <Typography variant="h6" sx={{ mb: 2, color: '#2e7d32', fontWeight: 600 }}>
+              💰 Total Expenses
+            </Typography>
+            
+            <Box sx={{ mb: 1 }}>
+              <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: '#2e7d32', fontWeight: 500 }}>Total Income:</span>
+                <span style={{ color: '#2e7d32', fontWeight: 600 }}>₹{totalIncome.toFixed(2)}</span>
+              </Typography>
+            </Box>
+            
+            <Box sx={{ mb: 1 }}>
+              <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: '#d32f2f', fontWeight: 500 }}>Total Expenses:</span>
+                <span style={{ color: '#d32f2f', fontWeight: 600 }}>₹{totalExpense.toFixed(2)}</span>
+              </Typography>
+            </Box>
+            
+           
+            
+            <Box>
+              <Typography variant="body1" sx={{ display: 'flex', justifyContent: 'space-between', fontWeight: 600 }}>
+                <span style={{ color: netBalance >= 0 ? '#2e7d32' : '#d32f2f' }}>Net Balance:</span>
+                <span style={{ color: netBalance >= 0 ? '#2e7d32' : '#d32f2f' }}>
+                  ₹{netBalance.toFixed(2)}
+                </span>
+              </Typography>
+            </Box>
+          </Paper>
+
+          <Paper sx={{ p: 2, mb: 2, borderRadius: 2, backgroundColor: '#fff3e0' }}>
+            <Typography variant="h6" sx={{ mb: 1, color: '#ef6c00', fontWeight: 600 }}>
+              📊 Charts
+            </Typography>
+            <Typography variant="body2" sx={{ lineHeight: 1.6, color: '#666' }}>
+              Visual representation of your spending patterns and category-wise breakdown will be displayed here.
+            </Typography>
+            <Box sx={{ mt: 2, p: 2, backgroundColor: '#fafafa', borderRadius: 1, textAlign: 'center' }}>
+              <Typography variant="body2" sx={{ color: '#888', fontStyle: 'italic' }}>
+                📈 Chart visualization coming soon
+              </Typography>
+            </Box>
+          </Paper>
+
+        </Box>
+      </Drawer>
+    
+  
+
+       <Box sx={{maxWidth:500,mx:'auto',width:'100%', mb: 1}}>
+            
+
+
+      <Typography variant="h3" sx={{
+        textAlign:'center',mb:4,fontWeight:700,mt:1}}>
+        💰 Expense Tracker
       </Typography>
-      
-      {message && (
-        <Alert severity="success" sx={{ mt: 2 }}>
-          {message}
-        </Alert>
-      )}
-      
-      <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
-        <Controller
-          name="title"
-          control={control}
-          rules={{ required: 'Title is required' }}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="Title"
-              placeholder="Coffee, Salary, Groceries"
-              error={!!errors.title}
-              helperText={errors.title?.message}
-              fullWidth
-            />
-          )}
-        />
 
-        <Controller
-          name="amount"
-          control={control}
-          rules={{ 
-            required: 'Amount is required',
-            validate: value => !isNaN(value) || 'Must be a valid number'
-          }}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="Amount"
-              type="number"
-              placeholder="+ income, - expense"
-              helperText={errors.amount?.message || "Positive for income, negative for expense"}
-              error={!!errors.amount}
-              fullWidth
-            />
-          )}
-        />
+     
 
-        <Controller
-          name="category"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              select
-              label="Category"
-              fullWidth
-            >
-              {['Food', 'Travel', 'Shopping', 'Bills', 'Salary', 'Other'].map(category => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              ))}
-            </TextField>
-          )}
-        />
 
-        <Controller
-          name="date"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="Date"
-              type="date"
-              InputLabelProps={{ shrink: true }}
-              fullWidth
-            />
-          )}
-        />
+    <Paper 
+      elevation={8} 
+      sx={{ 
+        p: 4, 
+        borderRadius: 9,
+     
+        border: '3px solid #dbd9d9ff'
+      }}>
+        <Typography 
+        variant="h4" 
+        gutterBottom 
+        sx={{ 
+          color: '#251515ff', 
+          fontWeight: 600,
+          textAlign: 'center',
+          mb: 3
+        }}
+      >
+        ✨ Add New Transaction
+      </Typography> 
 
-        <Button
-          type="submit"
-          variant="contained"
-          size="large"
+            <Fade in={!!message} timeout={500}>
+              <Box sx={{ mb: 2 }}>
+                {message && (
+                  <Alert 
+                    severity="success" 
+                    sx={{ 
+                      borderRadius: 2,
+                      '& .MuiAlert-icon': {
+                        fontSize: '1.5rem'
+                      }
+                    }}
+                  >
+                    {message}
+                  </Alert>
+                )}
+              </Box>
+            </Fade> 
+
+            <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+
+                      <TextField
+                        {...register("title", { required: "Title is required" })}
+                        label="Title"
+                        placeholder="Coffee, Salary, Groceries"
+                        error={!!errors.title}
+                        helperText={errors.title?.message}
+                        fullWidth
+                                  InputProps={{
+                           startAdornment: (
+                            <InputAdornment position="start">
+                                   <Title sx={{ color: '#1976d2' }} />
+                                     </InputAdornment>
+                                          ),
+                                         }}
+                        sx={{
+                          '& .MuiOutlinedInput-root': {
+                            borderRadius: 3,
+                            '& input': {
+                              textAlign: 'center'
+                            }
+                          }
+                        }}
+                      />
+              
+                    <TextField
+                    {...register("amount",{required: 'Enter The Amount'})}
+                    label='Amount'
+                    placeholder='Income or Expense'
+                    type='number'
+                    error={!!errors.amount}
+                    helperText={errors.amount?.message}
+                    fullWidth
+                    InputProps={{
+                      startAdornment:(
+                        <InputAdornment position="start">
+                          <AttachMoney sx={{color:'#01a028ff'}}> </AttachMoney>
+                        </InputAdornment>
+                      )
+                    }}
+                    sx={{
+                      '& .MuiOutlinedInput-root':{
+                        borderRadius:3,
+                        '& input':{
+                          textAlign:'center'
+                        }
+                      }
+                    }}
+                    />
+
+                    <TextField
+          {...register("category")}
+          select
+          label="Category"
           fullWidth
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <Category sx={{ color: '#0f53e4ff' }} />
+              </InputAdornment>
+            ),
+          }}
+           SelectProps={{
+            native: true,
+          }}
+          sx={{
+            '& .MuiOutlinedInput-root': {
+              borderRadius: 3
+            }
+          }}
         >
-          Add Transaction
-        </Button>
-      </Box>
+          {['Food', 'Travel', 'Shopping', 'Bills', 'Salary', 'Other'].map(category => (
+            <option key={category} value={category}>
+              {category}
+            </option>
+          ))}
+        </TextField>
+
+            <TextField
+            {...register('date',{required:'Enter the Date'})}
+            fullWidth
+            label='Date'
+            type='date'
+            InputProps={{
+              startAdornment:(
+                <InputAdornment position="start">
+                  <CalendarToday sx={{color:'#12caebff'}}></CalendarToday>
+                </InputAdornment>
+              )
+            }}
+            sx={{
+              '& .MuiOutlinedInput-root':{
+                borderRadius:3
+              }
+            }}
+
+
+            />
+
+            <Button
+              fullWidth
+              size='large'
+              variant='contained'
+              type='submit'
+              sx={{borderRadius:15}}>
+                💰  Add Transcation
+            </Button>
+
+              </Box>  
     </Paper>
     </Box>
+    </>
   )
 }
 
