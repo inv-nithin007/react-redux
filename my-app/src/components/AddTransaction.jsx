@@ -10,11 +10,13 @@ import {
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { addTransaction } from '../store/transactionSlice'
 
 function AddTransaction() {
   const dispatch = useDispatch()
   const transactions = useSelector(state => state.transactions.transactions)
+  const navigate = useNavigate()
   const [message, setMessage] = useState('')
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
@@ -141,6 +143,7 @@ function AddTransaction() {
             <Button
               variant="contained"
               fullWidth
+              onClick={() => navigate('/charts')}
               sx={{
                 backgroundColor: '#ef6c00',
 

@@ -1,4 +1,4 @@
-import { Typography, Box, Button ,Paper ,Fade,  InputAdornment, Alert,TextField} from '@mui/material'
+import { Typography, Box, Button ,Paper ,Fade,  InputAdornment, Alert,TextField,Dialog,DialogTitle,DialogContent} from '@mui/material'
 import {
   AttachMoney,
   Category,
@@ -246,6 +246,17 @@ function Hi() {
       >
         Back
       </Button>
+
+             <Dialog 
+                  open={true} 
+                 
+                  fullWidth
+                >
+                  <DialogTitle>Edit Transaction</DialogTitle>
+
+                </Dialog>
+
+
       </Paper>
     </Box>
   )

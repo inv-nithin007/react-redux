@@ -133,7 +133,7 @@ function TransactionList() {
         <Box component="form" onSubmit={handleSubmit(handleSaveEdit)}>
           <DialogContent>
             <TextField
-              {...register("title", { required: "Title is required" })}
+              {...register("title", { required: "Title is required",min:2 })}
               label="Title"
               fullWidth
               sx={{mb:2}}
