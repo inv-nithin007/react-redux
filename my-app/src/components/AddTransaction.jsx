@@ -134,18 +134,22 @@ function AddTransaction() {
             </Box>
           </Paper>
 
-          <Paper sx={{ p: 2, mb: 2, borderRadius: 2, backgroundColor: '#fff3e0' }}>
-            <Typography variant="h6" sx={{ mb: 1, color: '#ef6c00', fontWeight: 600 }}>
+          <Paper elevation={9} sx={{ p: 2, mb: 2, borderRadius: 2, backgroundColor: '#fff3e0' }}>
+            <Typography variant="h6" sx={{ mb: 2, color: '#ef6c00', fontWeight: 600 }}>
               📊 Charts
             </Typography>
-            <Typography variant="body2" sx={{ lineHeight: 1.6, color: '#666' }}>
-              Visual representation of your spending patterns and category-wise breakdown will be displayed here.
-            </Typography>
-            <Box sx={{ mt: 2, p: 2, backgroundColor: '#fafafa', borderRadius: 1, textAlign: 'center' }}>
-              <Typography variant="body2" sx={{ color: '#888', fontStyle: 'italic' }}>
-                📈 Chart visualization coming soon
-              </Typography>
-            </Box>
+            <Button
+              variant="contained"
+              fullWidth
+              sx={{
+                backgroundColor: '#ef6c00',
+
+                borderRadius: 2,
+                fontWeight: 600
+              }}
+            >
+              View Chart
+            </Button>
           </Paper>
 
         </Box>

@@ -127,7 +127,6 @@ function TransactionList() {
       <Dialog 
         open={editDialog.open} 
         onClose={handleCloseDialog} 
-        
         fullWidth
       >
         <DialogTitle>Edit Transaction</DialogTitle>
