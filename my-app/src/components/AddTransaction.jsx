@@ -140,7 +140,7 @@ function AddTransaction() {
                     }}
                     />
 
-                    <TextField
+          <TextField
           {...register("category")}
           select
           label="Category"
@@ -157,7 +157,7 @@ function AddTransaction() {
           }}
           sx={{
             '& .MuiOutlinedInput-root': {
-              borderRadius: 3
+              borderRadius: 3,alignItems:'center'
             }
           }}
         >
