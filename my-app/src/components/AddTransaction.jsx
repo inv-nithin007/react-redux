@@ -82,7 +82,7 @@ function AddTransaction() {
 
     
       <Drawer
-        
+        anchor='left'
         open={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
         sx={{
@@ -190,7 +190,7 @@ function AddTransaction() {
           mb: 3
         }}
       >
-        ✨ Add New Transaction
+        Add New Transaction
       </Typography> 
 
             <Fade in={!!message} timeout={500}>
@@ -220,7 +220,7 @@ function AddTransaction() {
                         error={!!errors.title}
                         helperText={errors.title?.message}
                         fullWidth
-                                  InputProps={{
+                          InputProps={{
                            startAdornment: (
                             <InputAdornment position="start">
                                    <Title sx={{ color: '#1976d2' }} />

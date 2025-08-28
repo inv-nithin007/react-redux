@@ -19,7 +19,9 @@ import {
   Edit,
   Delete,
   TrendingUp,
-  TrendingDown
+  TrendingDown,
+  FilterList,
+  Clear
 } from '@mui/icons-material'
 
 function TransactionList() {
@@ -28,8 +30,40 @@ function TransactionList() {
   const navigate = useNavigate()
   const [editDialog, setEditDialog] = useState({ open: false })
   const [editingId, setEditingId] = useState(null)
+  const [filters, setFilters] = useState({
+    category: '',
+    fromDate: '',
+    toDate: ''
+  })
   
   const { register, handleSubmit, reset, formState: { errors } } = useForm()
+
+ 
+  const filteredTransactions = transactions.filter(transaction => {
+
+    if (filters.category && transaction.category !== filters.category) {
+      return false
+    }
+    
+  
+    if (filters.fromDate && transaction.date < filters.fromDate) {
+      return false
+    }
+    
+    if (filters.toDate && transaction.date > filters.toDate) {
+      return false
+    }
+    
+    return true
+  })
+
+  const handleClearFilters = () => {
+    setFilters({
+      category: '',
+      fromDate: '',
+      toDate: ''
+    })
+  }
 
   const handleEdit = (transaction) => {
     reset({
@@ -92,8 +126,66 @@ function TransactionList() {
         Your Transactions
       </Typography>
       
-      {transactions.map((transaction) => (
-        <Paper sx={{ mb: 2, p: 3 ,border:'3px solid #d1c5c5ff',borderRadius:5}}>
+      <Box sx={{ 
+        display: 'flex', 
+        gap: 3, 
+        mb: 3, 
+        p: 3, 
+        border: '2px solid #d1c5c5ff', 
+        borderRadius: 8,
+        alignItems: 'center',
+        flexWrap: 'wrap'
+      }}>
+        
+        
+        <TextField
+          select
+          label="Filter by Category"
+          InputLabelProps={{ shrink: true }}
+          value={filters.category}
+          onChange={(e) => setFilters({ ...filters, category: e.target.value })}
+          SelectProps={{ native: true }}
+          sx={{ minWidth: 150 }}
+        >
+          <option value="">All Categories</option>
+          <option value="Food">Food</option>
+          <option value="Travel">Travel</option>
+          <option value="Shopping">Shopping</option>
+          <option value="Bills">Bills</option>
+          <option value="Salary">Salary</option>
+          <option value="Other">Other</option>
+        </TextField>
+
+        <TextField
+          label="From Date"
+          type="date"
+          value={filters.fromDate}
+          onChange={(e) => setFilters({ ...filters, fromDate: e.target.value })}
+          InputLabelProps={{ shrink: true }}
+          sx={{ minWidth: 150 }}
+        />
+
+        <TextField
+          label="To Date"
+          type="date"
+          value={filters.toDate}
+          onChange={(e) => setFilters({ ...filters, toDate: e.target.value })}
+          InputLabelProps={{ shrink: true }}
+          sx={{ minWidth: 150 }}
+        />
+
+        <Button
+          startIcon={<Clear />}
+          variant="outlined"
+          onClick={handleClearFilters}
+          sx={{ borderRadius: 3 }}
+        >
+          Clear
+        </Button>
+      </Box>
+      
+      {filteredTransactions.map((transaction) => (
+        <Paper elevation={9} sx={{ mb: 2, p: 3 ,border:'1px solid #a39999ff',borderRadius:5}}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Box>
               <Typography variant="h6">{transaction.title}</Typography>
