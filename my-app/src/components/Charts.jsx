@@ -17,7 +17,7 @@ function Charts() {
   })
 
   const chartData = Object.entries(expensesByCategory).map(([name, value]) => ({ name, value }))
-  const colors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40']
+  const colors = ['#eb1846ff', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40']
 
   return (
     <Box sx={{ maxWidth: 800, mx: 'auto', p: 3 }}>
