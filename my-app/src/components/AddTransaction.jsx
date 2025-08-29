@@ -61,6 +61,7 @@ function AddTransaction() {
     setTimeout(() => setMessage(''), 3000)
   }
 
+
   return (
     <>
     
@@ -193,7 +194,7 @@ function AddTransaction() {
         Add New Transaction
       </Typography> 
 
-            <Fade in={!!message} timeout={500}>
+       
               <Box sx={{ mb: 2 }}>
                 {message && (
                   <Alert 
@@ -209,7 +210,7 @@ function AddTransaction() {
                   </Alert>
                 )}
               </Box>
-            </Fade> 
+          
 
             <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
 

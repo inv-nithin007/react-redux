@@ -108,13 +108,6 @@ function TransactionList() {
         <Typography variant="body1" color="text.secondary">
           Add your first transaction above!
         </Typography>
-        <Button
-          variant="contained"
-          sx={{ mt: 2 }}
-          onClick={() => navigate('/hi')}
-        >
-          Go to Hi
-        </Button>
       </Box>
     )
   }
@@ -144,7 +137,7 @@ function TransactionList() {
           value={filters.category}
           onChange={(e) => setFilters({ ...filters, category: e.target.value })}
           SelectProps={{ native: true }}
-          sx={{ minWidth: 150 }}
+          
         >
           <option value="">All Categories</option>
           <option value="Food">Food</option>
@@ -161,7 +154,7 @@ function TransactionList() {
           value={filters.fromDate}
           onChange={(e) => setFilters({ ...filters, fromDate: e.target.value })}
           InputLabelProps={{ shrink: true }}
-          sx={{ minWidth: 150 }}
+          
         />
 
         <TextField
@@ -170,7 +163,7 @@ function TransactionList() {
           value={filters.toDate}
           onChange={(e) => setFilters({ ...filters, toDate: e.target.value })}
           InputLabelProps={{ shrink: true }}
-          sx={{ minWidth: 150 }}
+          
         />
 
         <Button
@@ -280,14 +273,6 @@ function TransactionList() {
           </DialogActions>
         </Box>
       </Dialog>
-      
-      <Button
-        variant="contained"
-        sx={{ position: 'fixed', bottom: 20, right: 20 }}
-        onClick={() => navigate('/hi')}
-      >
-        Go to Hi
-      </Button>
     </Box>
   )
 }
