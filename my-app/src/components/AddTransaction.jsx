@@ -98,7 +98,7 @@ function AddTransaction() {
         <Box sx={{ p: 3 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
             <Typography variant="h5" sx={{ fontWeight: 600, color: '#1976d2' }}>
-              📊 Quick Info
+               Quick Info
             </Typography>
             <IconButton onClick={() => setSidebarOpen(false)}>
               <Close />
@@ -138,7 +138,7 @@ function AddTransaction() {
 
           <Paper elevation={9} sx={{ p: 2, mb: 2, borderRadius: 2, backgroundColor: '#fff3e0' }}>
             <Typography variant="h6" sx={{ mb: 2, color: '#ef6c00', fontWeight: 600 }}>
-              📊 Charts
+              Pie Chart
             </Typography>
             <Button
               variant="contained"

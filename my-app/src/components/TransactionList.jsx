@@ -20,7 +20,6 @@ import {
   Delete,
   TrendingUp,
   TrendingDown,
-  FilterList,
   Clear
 } from '@mui/icons-material'
 
