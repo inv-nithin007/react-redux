@@ -3,17 +3,15 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { editTransaction, deleteTransaction } from '../store/transactionSlice'
+import { EditDialog, DeleteDialog } from './Dialog'
 import {
   Box,
   Paper,
   Typography,
   IconButton,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Button,
-  TextField
+  TextField,
+  Pagination
 } from '@mui/material'
 import {
   Edit,
@@ -28,33 +26,35 @@ function TransactionList() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [editDialog, setEditDialog] = useState({ open: false })
-  const [editingId, setEditingId] = useState(null)
+  const [deleteDialog, setDeleteDialog] = useState({ open: false })
+  const [currentTransaction, setCurrentTransaction] = useState(null)
   const [filters, setFilters] = useState({
     category: '',
     fromDate: '',
     toDate: ''
   })
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 5
   
   const { register, handleSubmit, reset, formState: { errors } } = useForm()
 
  
   const filteredTransactions = transactions.filter(transaction => {
-
     if (filters.category && transaction.category !== filters.category) {
       return false
     }
-    
-  
     if (filters.fromDate && transaction.date < filters.fromDate) {
       return false
     }
-    
     if (filters.toDate && transaction.date > filters.toDate) {
       return false
     }
-    
     return true
   })
+
+  const totalPages = Math.ceil(filteredTransactions.length / itemsPerPage)
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const currentTransactions = filteredTransactions.slice(startIndex, startIndex + itemsPerPage)
 
   const handleClearFilters = () => {
     setFilters({
@@ -62,6 +62,11 @@ function TransactionList() {
       fromDate: '',
       toDate: ''
     })
+    setCurrentPage(1)
+  }
+
+  const handlePageChange = (event, page) => {
+    setCurrentPage(page)
   }
 
   const handleEdit = (transaction) => {
@@ -71,13 +76,13 @@ function TransactionList() {
       category: transaction.category,
       date: transaction.date
     })
-    setEditingId(transaction.id)
+    setCurrentTransaction(transaction)
     setEditDialog({ open: true })
   }
 
   const handleSaveEdit = (data) => {
     dispatch(editTransaction({ 
-      id: editingId, 
+      id: currentTransaction.id, 
       updates: {
         title: data.title.trim(),
         amount: parseFloat(data.amount),
@@ -86,17 +91,29 @@ function TransactionList() {
       }
     }))
     setEditDialog({ open: false })
-    setEditingId(null)
+    setCurrentTransaction(null)
   }
 
-  const handleCloseDialog = () => {
+  const handleCloseEditDialog = () => {
     setEditDialog({ open: false })
-    setEditingId(null)
+    setCurrentTransaction(null)
     reset()
   }
 
-  const handleDelete = (id) => {
-    dispatch(deleteTransaction(id))
+  const handleDeleteClick = (transaction) => {
+    setCurrentTransaction(transaction)
+    setDeleteDialog({ open: true })
+  }
+
+  const handleConfirmDelete = () => {
+    dispatch(deleteTransaction(currentTransaction.id))
+    setDeleteDialog({ open: false })
+    setCurrentTransaction(null)
+  }
+
+  const handleCloseDeleteDialog = () => {
+    setDeleteDialog({ open: false })
+    setCurrentTransaction(null)
   }
 
   if (transactions.length === 0) {
@@ -176,7 +193,7 @@ function TransactionList() {
         </Button>
       </Box>
       
-      {filteredTransactions.map((transaction) => (
+      {currentTransactions.map((transaction) => (
         <Paper elevation={9} sx={{ mb: 2, p: 3 ,border:'1px solid #a39999ff',borderRadius:5}}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Box>
@@ -200,7 +217,7 @@ function TransactionList() {
               <IconButton onClick={() => handleEdit(transaction)}>
                 <Edit color='primary' />
               </IconButton>
-              <IconButton onClick={() => handleDelete(transaction.id)}>
+              <IconButton onClick={() => handleDeleteClick(transaction)}>
                 <Delete color='error' />
               </IconButton>
             </Box>
@@ -208,71 +225,33 @@ function TransactionList() {
         </Paper>
       ))}
 
-      <Dialog 
-        open={editDialog.open} 
-        onClose={handleCloseDialog} 
-        fullWidth
-      >
-        <DialogTitle>Edit Transaction</DialogTitle>
-        <Box component="form" onSubmit={handleSubmit(handleSaveEdit)}>
-          <DialogContent>
-            <TextField
-              {...register("title", { required: "Title is required",min:2 })}
-              label="Title"
-              fullWidth
-              sx={{mb:2}}
-            
-              error={!!errors.title}
-              helperText={errors.title?.message}
-            />
-            <TextField
-              {...register("amount", { 
-                required: "Amount is required"
-              })}
-              sx={{mb:2}}
-              label="Amount"
-              type="number"
-              fullWidth
-              
-              error={!!errors.amount}
-              helperText={errors.amount?.message}
-            />
-            <TextField
-            sx={{mb:2}}
-              {...register("category")}
-              label="Category"
-              select
-              fullWidth
-              
-              SelectProps={{ native: true }}
-            >
-              {['Food', 'Travel', 'Shopping', 'Bills', 'Salary', 'Other'].map(category => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              ))}
-            </TextField>
-            <TextField
-              {...register("date", { required: "Date is required" })}
-              label="Date"
-              type="date"
-              fullWidth
-              sx={{mb:2}}
-              InputLabelProps={{ shrink: true }}
-              error={!!errors.date}
-              helperText={errors.date?.message}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCloseDialog}>
-              Cancel
-            </Button>
-            <Button type="submit" variant="contained">
-              Save Changes
-            </Button>
-          </DialogActions>
+      <EditDialog
+        open={editDialog.open}
+        onClose={handleCloseEditDialog}
+        onSave={handleSaveEdit}
+        register={register}
+        handleSubmit={handleSubmit}
+        errors={errors}
+      />
+
+      <DeleteDialog
+        open={deleteDialog.open}
+        onClose={handleCloseDeleteDialog}
+        onConfirm={handleConfirmDelete}
+        transaction={currentTransaction}
+      />
+      
+     
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4,mb:5 }}>
+          <Pagination
+            count={totalPages}
+            page={currentPage}
+            onChange={handlePageChange}
+            color="primary"
+            size="large"
+          />
         </Box>
-      </Dialog>
+      
     </Box>
   )
 }

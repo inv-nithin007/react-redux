@@ -65,7 +65,7 @@ function Charts() {
             <Box sx={{ mt: 2}}>
               {chartData.map((item, index) => (
                 <Box 
-                  key={item.name}
+                 
                   sx={{ 
                     display: 'flex', 
                     justifyContent: 'space-between', 

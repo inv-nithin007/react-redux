@@ -1,12 +1,13 @@
-import { Typography, Box, Button ,Paper ,Fade,  InputAdornment, Alert,TextField, Drawer, IconButton} from '@mui/material'
+import { Typography, Box, Button ,Paper ,  InputAdornment, Alert,TextField, Drawer, IconButton} from '@mui/material'
 import {
   AttachMoney,
   Category,
   Title,
   CalendarToday,
   Menu,
-  Close
-} from '@mui/icons-material'
+  Close 
+}
+from '@mui/icons-material'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
@@ -70,10 +71,10 @@ function AddTransaction() {
   sx={{
     mt:1,
     backgroundColor: '#2d41f7ff',
-    '&:hover': {
-      backgroundColor: 'white',
+    ':hover': {
+      backgroundColor: '#858080ff',
     },
-    '& .MuiSvgIcon-root': {
+    '.MuiSvgIcon-root': {
       fontSize: '2rem',
     },
   }}
@@ -88,7 +89,7 @@ function AddTransaction() {
         onClose={() => setSidebarOpen(false)}
         sx={{
 
-          '& .MuiDrawer-paper': {
+          '.MuiDrawer-paper': {
             width: 300,
            
             backgroundColor: '#f5f5f5',
@@ -106,8 +107,8 @@ function AddTransaction() {
             </IconButton>
           </Box>
 
-          <Paper elevation={9} sx={{ p: 2, mb: 2, borderRadius: 2, backgroundColor: '#e8f5e8' }}>
-            <Typography variant="h6" sx={{ mb: 2, color: '#2e7d32', fontWeight: 600 }}>
+          <Paper elevation={12} sx={{ p: 2, mb: 2, borderRadius: 2, backgroundColor: '#e8f5e8' }}>
+            <Typography variant="h6" sx={{ mb: 2, color: '#2e7d32', fontWeight: 1000 }}>
               💰 Total Expenses
             </Typography>
             
@@ -168,22 +169,23 @@ function AddTransaction() {
       <Typography variant="h3" sx={{
         textAlign:'center',mb:4,fontWeight:700,mt:1}}>
         💰 Expense Tracker
+        
       </Typography>
 
      
 
 
     <Paper 
-      elevation={8} 
+      elevation={12} 
       sx={{ 
         p: 4, 
         borderRadius: 9,
      
-        border: '3px solid #dbd9d9ff'
+        border: '1px solid #f0e4e4ff'
       }}>
         <Typography 
         variant="h4" 
-        gutterBottom 
+        
         sx={{ 
           color: '#251515ff', 
           fontWeight: 600,
@@ -201,8 +203,8 @@ function AddTransaction() {
                     severity="success" 
                     sx={{ 
                       borderRadius: 2,
-                      '& .MuiAlert-icon': {
-                        fontSize: '1.5rem'
+                      ' .MuiAlert-icon': {
+                        fontSize: '2rem'
                       }
                     }}
                   >
@@ -217,10 +219,10 @@ function AddTransaction() {
                       <TextField
                         {...register("title", { required: "Title is required" })}
                         label="Title"
-                        placeholder="Coffee, Salary, Groceries"
+                  placeholder="Coffee, Salary, Groceries"
                         error={!!errors.title}
                         helperText={errors.title?.message}
-                        fullWidth
+                     
                           InputProps={{
                            startAdornment: (
                             <InputAdornment position="start">
@@ -229,9 +231,9 @@ function AddTransaction() {
                                           ),
                                          }}
                         sx={{
-                          '& .MuiOutlinedInput-root': {
+                          '.MuiOutlinedInput-root': {
                             borderRadius: 3,
-                            '& input': {
+                            'input': {
                               textAlign: 'center'
                             }
                           }
@@ -245,7 +247,7 @@ function AddTransaction() {
                     type='number'
                     error={!!errors.amount}
                     helperText={errors.amount?.message}
-                    fullWidth
+                    
                     InputProps={{
                       startAdornment:(
                         <InputAdornment position="start">
@@ -254,20 +256,20 @@ function AddTransaction() {
                       )
                     }}
                     sx={{
-                      '& .MuiOutlinedInput-root':{
+                      ' .MuiOutlinedInput-root':{
                         borderRadius:3,
-                        '& input':{
+                        'input':{
                           textAlign:'center'
                         }
                       }
                     }}
                     />
 
-                    <TextField
+        <TextField
           {...register("category")}
           select
           label="Category"
-          fullWidth
+          
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -279,13 +281,13 @@ function AddTransaction() {
             native: true,
           }}
           sx={{
-            '& .MuiOutlinedInput-root': {
-              borderRadius: 3
+            '.MuiOutlinedInput-root': {
+              borderRadius: 3, 
             }
           }}
         >
           {['Food', 'Travel', 'Shopping', 'Bills', 'Salary', 'Other'].map(category => (
-            <option key={category} value={category}>
+            <option >
               {category}
             </option>
           ))}
@@ -304,7 +306,7 @@ function AddTransaction() {
               )
             }}
             sx={{
-              '& .MuiOutlinedInput-root':{
+              '.MuiOutlinedInput-root':{
                 borderRadius:3
               }
             }}
