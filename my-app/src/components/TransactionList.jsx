@@ -18,7 +18,8 @@ import {
   Delete,
   TrendingUp,
   TrendingDown,
-  Clear
+  Clear,
+  Download
 } from '@mui/icons-material'
 
 function TransactionList() {
@@ -116,6 +117,21 @@ function TransactionList() {
     setCurrentTransaction(null)
   }
 
+  const exportToCSV = () => {
+    const csvHeader = 'title,amount,category,date\n'
+    const csvData = filteredTransactions.map(t => 
+      `${t.title},${t.amount},${t.category},${t.date}`
+    ).join('\n')
+    
+    const blob = new Blob([csvHeader + csvData], { type: 'text/csv' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'transactions.csv'
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
   if (transactions.length === 0) {
     return (
       <Box sx={{ textAlign: 'center', p: 4 }}>
@@ -199,6 +215,15 @@ function TransactionList() {
           sx={{ borderRadius: 3 }}
         >
           Clear
+        </Button>
+
+        <Button
+          startIcon={<Download />}
+          variant="contained"
+          onClick={exportToCSV}
+          sx={{ borderRadius: 3 }}
+        >
+          Export CSV
         </Button>
       </Box>
       

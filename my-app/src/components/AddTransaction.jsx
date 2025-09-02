@@ -62,6 +62,40 @@ function AddTransaction() {
     setTimeout(() => setMessage(''), 3000)
   }
 
+  const handleCsvUpload = (event) => {
+    const file = event.target.files[0]
+    if (!file) return
+
+    const reader = new FileReader()
+    reader.readAsText(file)
+    reader.onload = (e) => {
+      const text = e.target.result
+      const lines = text.split('\n')
+      let count = 0
+
+      for (let i = 1; i < lines.length; i++) {
+        const line = lines[i].trim()
+        if (!line) continue
+
+        const [title, amount, category, date] = line.split(',')
+        if (title && amount && category && date) {
+          dispatch(addTransaction({
+            title: title.trim(),
+            amount: parseFloat(amount.trim()),
+            category: category.trim(),
+            date: date.trim()
+          }))
+          count++
+        }
+      }
+
+      setMessage(`${count} transactions imported!`)
+      setTimeout(() => setMessage(''), 3000)
+      event.target.value = ''
+    }
+    
+  }
+
 
   return (
     <>
@@ -322,6 +356,26 @@ function AddTransaction() {
               sx={{borderRadius:15}}>
                 💰  Add Transcation
             </Button>
+
+            <Box sx={{ mt: 2, textAlign: 'center' }}>
+              <Typography variant="body2" sx={{ mb: 1, color: 'text.secondary' }}>
+                Or upload CSV (title,amount,category,date)
+              </Typography>
+              <Button
+                component="label"
+                variant="outlined"
+                size="medium"
+                sx={{ borderRadius: 3 }}
+              >
+                 Upload CSV
+                <input
+                  type="file"
+                  accept=".csv"
+                  onChange={handleCsvUpload}
+                  style={{ display: 'none' }}
+                />
+              </Button>
+            </Box>
 
               </Box>  
     </Paper>
