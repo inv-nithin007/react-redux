@@ -73,7 +73,8 @@ function Charts() {
                     mb: 1,
                     bgcolor: '#d6ceceff',
                     borderRadius: 2,
-                    borderLeft: `8px solid ${colors[index]}`
+                    borderLeft: `8px solid ${colors[index]}`,
+                    borderRight: `8px solid ${colors[index]}`
                   }}>
                   <Typography sx={{ fontWeight: 500 }}>{item.name}</Typography>
                   <Typography sx={{ fontWeight: 600, color: '#1f1010ff' }}>₹{item.value}</Typography>

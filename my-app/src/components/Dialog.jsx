@@ -83,15 +83,19 @@ function DeleteDialog({ open, onClose, onConfirm, transaction }) {
         <Box sx={{ 
           p: 2, 
           backgroundColor: '#f5f5f5', 
-          borderRadius: 2, 
-          border: '1px solid #ddd' 
+          borderRadius: 5, 
+          border: '2px solid #999292ff' 
         }}>
           <Typography variant="h6" sx={{ fontWeight: 600 }}>
             {transaction?.title}
           </Typography>
+      
+
+         
           <Typography variant="body2" color="text.secondary">
-            {transaction?.category} • {new Date(transaction?.date).toLocaleDateString()}
+            {transaction?.category} •  {new Date(transaction?.date).toLocaleDateString()}
           </Typography>
+      
           <Typography 
             variant="h6" 
             sx={{ 

@@ -152,7 +152,10 @@ function TransactionList() {
           label="Filter by Category"
           InputLabelProps={{ shrink: true }}
           value={filters.category}
-          onChange={(e) => setFilters({ ...filters, category: e.target.value })}
+          onChange={(e) => {
+            setFilters({ ...filters, category: e.target.value })
+            setCurrentPage(1)
+          }}
           SelectProps={{ native: true }}
           
         >
@@ -169,7 +172,10 @@ function TransactionList() {
           label="From Date"
           type="date"
           value={filters.fromDate}
-          onChange={(e) => setFilters({ ...filters, fromDate: e.target.value })}
+          onChange={(e) => {
+            setFilters({ ...filters, fromDate: e.target.value })
+            setCurrentPage(1)
+          }}
           InputLabelProps={{ shrink: true }}
           
         />
@@ -178,7 +184,10 @@ function TransactionList() {
           label="To Date"
           type="date"
           value={filters.toDate}
-          onChange={(e) => setFilters({ ...filters, toDate: e.target.value })}
+          onChange={(e) => {
+            setFilters({ ...filters, toDate: e.target.value })
+            setCurrentPage(1)
+          }}
           InputLabelProps={{ shrink: true }}
           
         />
