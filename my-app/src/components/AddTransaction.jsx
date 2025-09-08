@@ -20,6 +20,7 @@ function AddTransaction() {
   const navigate = useNavigate()
   const [message, setMessage] = useState('')
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [dragActive, setDragActive] = useState(false)
 
   let totalIncome = 0
   let totalExpense = 0
@@ -62,15 +63,38 @@ function AddTransaction() {
     setTimeout(() => setMessage(''), 3000)
   }
 
-  const handleCsvUpload = (event) => {
-    const file = event.target.files[0]
+  const processFile = (file) => {
     if (!file) return
+
+
+    if (!file.name.endsWith('.csv')) {
+      setMessage('Please upload a CSV file only!')
+      setTimeout(() => setMessage(''), 3000)
+      return
+    }
+
+
+    if (file.name.length > 100) {
+      setMessage('File name too long! Maximum 100 characters allowed.')
+      setTimeout(() => setMessage(''), 3000)
+      return
+    }
+
+   
+    const maxFileSize = 1 * 1024 * 1024 * 1024 
+    if (file.size > maxFileSize) {
+      setMessage('File size too large! Maximum size allowed is 1GB.')
+      setTimeout(() => setMessage(''), 3000)
+      return
+    }
 
     const reader = new FileReader()
     reader.readAsText(file)
     reader.onload = (e) => {
       const text = e.target.result
       const lines = text.split('\n')
+      
+
       let count = 0
 
       for (let i = 1; i < lines.length; i++) {
@@ -89,11 +113,38 @@ function AddTransaction() {
         }
       }
 
-      setMessage(`${count} transactions imported!`)
+      setMessage(`${count} transactions imported successfully!`)
       setTimeout(() => setMessage(''), 3000)
-      event.target.value = ''
     }
+  }
+
+  const handleCsvUpload = (event) => {
+    const file = event.target.files[0]
+    processFile(file)
+    event.target.value = ''
+  }
+
+  const handleDragOver = (e) => {
+    e.preventDefault()
+   
+    setDragActive(true)
+  }
+
+  const handleDragLeave = (e) => {
+    e.preventDefault()
+   
+    setDragActive(false)
+  }
+
+  const handleDrop = (e) => {
+    e.preventDefault()
+ 
+    setDragActive(false)
     
+    const files = e.dataTransfer.files
+    if (files.length > 0) {
+      processFile(files[0])
+    }
   }
 
 
@@ -357,24 +408,77 @@ function AddTransaction() {
                 💰  Add Transcation
             </Button>
 
-            <Box sx={{ mt: 2, textAlign: 'center' }}>
-              <Typography variant="body2" sx={{ mb: 1, color: 'text.secondary' }}>
-                Or upload CSV (title,amount,category,date)
+            <Box sx={{ mt: 3 }}>
+              <Typography variant="body2" sx={{ mb: 2, textAlign: 'center', color: 'text.secondary' }}>
+                Or import transactions from CSV (title,amount,category,date)
               </Typography>
-              <Button
-                component="label"
-                variant="outlined"
-                size="medium"
-                sx={{ borderRadius: 3 }}
+              
+              <Box
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                sx={{
+                  border: dragActive ? '4px dashed #1976d2' : '2px dashed #ccc',
+                  borderRadius: 4,
+                  p: 4,
+                  textAlign: 'center',
+                  cursor: 'pointer',
+                  transition: 'all .2s ease',
+                  backgroundColor: dragActive ? '#e0d7d7ff' : '#fafafa',
+                  '&:hover': {
+                    
+                    borderColor: '#1976d2',
+                    backgroundColor: '#f5f5f5'
+                  }
+                }}
               >
-                 Upload CSV
-                <input
-                  type="file"
-                  accept=".csv"
-                  onChange={handleCsvUpload}
-                  style={{ display: 'none' }}
-                />
-              </Button>
+                <Box sx={{ mb: 2 }}>
+                  <Typography variant="h6" sx={{ 
+                   
+                    fontSize: '3rem',
+                    mb: 1
+                  }}>
+                    📁
+                  </Typography>
+                  <Typography variant="body1" sx={{ 
+                   
+                    fontWeight: 500,
+                    mb: 1
+                  }}>
+                    {dragActive ? 'Drop CSV file here!' : 'Drag & drop CSV file here'}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
+                    or click to browse files
+                  </Typography>
+                </Box>
+                
+                <Button
+                  component="label"
+                  variant="contained"
+                  
+                  sx={{ 
+                    borderRadius: 4,
+                    px: 3
+                  }}
+                >
+                  Choose File
+                  <input
+                    type="file"
+                    accept=".csv"
+                    onChange={handleCsvUpload}
+                    style={{ display: 'none' }}
+                  />
+                </Button>
+              </Box>
+              
+              <Typography variant="caption" sx={{ 
+                display: 'block', 
+                textAlign: 'center', 
+                mt: 1, 
+                color: 'text.secondary' 
+              }}>
+                Supported format: CSV files only • Max 100 charachter filename • Max 1GB file size
+              </Typography>
             </Box>
 
               </Box>  
