@@ -8,7 +8,6 @@ function Charts() {
   const transactions = useSelector(state => state.transactions.transactions)
   const navigate = useNavigate()
 
- 
   const expensesByCategory = {}
   transactions.forEach(t => {
     if (t.amount < 0) {
