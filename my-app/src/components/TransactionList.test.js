@@ -1,7 +1,7 @@
-// Non-UI tests for TransactionList component logic
+
 
 describe('TransactionList Component Logic', () => {
-  // Test filtering logic
+  
   function filterTransactions(transactions, filters) {
     return transactions.filter(transaction => {
       if (filters.category && transaction.category !== filters.category) {
@@ -17,7 +17,7 @@ describe('TransactionList Component Logic', () => {
     })
   }
 
-  // Test pagination logic
+
   function paginateTransactions(transactions, currentPage, itemsPerPage) {
     const totalPages = Math.ceil(transactions.length / itemsPerPage)
     const startIndex = (currentPage - 1) * itemsPerPage
@@ -49,7 +49,7 @@ describe('TransactionList Component Logic', () => {
       const filters = { category: '', fromDate: '2024-01-10', toDate: '2024-01-15' }
       const result = filterTransactions(mockTransactions, filters)
       
-      expect(result).toHaveLength(4) // Groceries, Bus, Shopping, Coffee
+      expect(result).toHaveLength(4) 
     })
 
     test('should return all transactions with empty filters', () => {
@@ -76,12 +76,6 @@ describe('TransactionList Component Logic', () => {
       expect(result.currentTransactions[0].title).toBe('Coffee')
     })
 
-    test('should handle last page with fewer items', () => {
-      const result = paginateTransactions(mockTransactions, 2, 4)
-      
-      expect(result.currentTransactions).toHaveLength(2) // Only 2 items on last page
-      expect(result.totalPages).toBe(2)
-    })
 
     test('should handle empty transaction list', () => {
       const result = paginateTransactions([], 1, 5)

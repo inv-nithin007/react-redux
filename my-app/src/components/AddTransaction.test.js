@@ -1,7 +1,7 @@
-// Non-UI tests for AddTransaction component logic
+
 
 describe('AddTransaction Component Logic', () => {
-  // Test financial calculations
+
   function calculateFinancialSummary(transactions) {
     let totalIncome = 0
     let totalExpense = 0
@@ -22,11 +22,11 @@ describe('AddTransaction Component Logic', () => {
   describe('Financial Summary Calculations', () => {
     test('should calculate correct totals with mixed transactions', () => {
       const transactions = [
-        { amount: 5000 },   // income
-        { amount: -200 },   // expense
-        { amount: 1500 },   // income  
-        { amount: -50 },    // expense
-        { amount: -100 }    // expense
+        { amount: 5000 },   
+        { amount: -200 },   
+        { amount: 1500 },    
+        { amount: -50 },    
+        { amount: -100 }    
       ]
       
       const result = calculateFinancialSummary(transactions)

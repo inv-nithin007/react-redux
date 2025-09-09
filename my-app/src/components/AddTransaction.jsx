@@ -119,7 +119,7 @@ function AddTransaction() {
   }
 
   const handleCsvUpload = (event) => {
-    const file = event.target.files[0]
+    const file = event.target.files
     processFile(file)
     event.target.value = ''
   }
@@ -239,6 +239,24 @@ function AddTransaction() {
               }}
             >
               View Chart
+            </Button>
+          </Paper>
+
+          <Paper elevation={9} sx={{ p: 2, mb: 2, borderRadius: 2, backgroundColor: '#e3f2fd' }}>
+            <Typography variant="h6" sx={{ mb: 2, color: '#1976d2', fontWeight: 600 }}>
+              Registration
+            </Typography>
+            <Button
+              variant="contained"
+              fullWidth
+              onClick={() => navigate('/registration')}
+              sx={{
+                backgroundColor: '#1976d2',
+                borderRadius: 2,
+                fontWeight: 600
+              }}
+            >
+              Registration
             </Button>
           </Paper>
 
@@ -425,7 +443,7 @@ function AddTransaction() {
                   cursor: 'pointer',
                   transition: 'all .2s ease',
                   backgroundColor: dragActive ? '#e0d7d7ff' : '#fafafa',
-                  '&:hover': {
+                  ':hover': {
                     
                     borderColor: '#1976d2',
                     backgroundColor: '#f5f5f5'
@@ -464,6 +482,7 @@ function AddTransaction() {
                   Choose File
                   <input
                     type="file"
+                    multiple
                     accept=".csv"
                     onChange={handleCsvUpload}
                     style={{ display: 'none' }}
@@ -475,9 +494,9 @@ function AddTransaction() {
                 display: 'block', 
                 textAlign: 'center', 
                 mt: 1, 
-                color: 'text.secondary' 
+                color: '#000000ff' 
               }}>
-                Supported format: CSV files only • Max 100 charachter filename • Max 1GB file size
+                {message}
               </Typography>
             </Box>
 

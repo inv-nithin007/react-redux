@@ -12,7 +12,7 @@ const transactionSlice = createSlice({
     addTransaction: (state, action) => {
       const { title, amount, category, date } = action.payload
       
-      // Check if identical transaction exists
+     
       const existingIndex = state.transactions.findIndex(t => 
         t.title === title && 
         t.category === category && 
@@ -20,10 +20,10 @@ const transactionSlice = createSlice({
       )
       
       if (existingIndex !== -1) {
-        // Add to existing transaction
+        
         state.transactions[existingIndex].amount += amount
       } else {
-        // Create new transaction
+       
         const newTransaction = {
           id: uuidv4(),
           title,
