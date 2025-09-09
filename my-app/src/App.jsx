@@ -8,12 +8,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={
-          <div>
-            <AddTransaction />
-            <TransactionList />
-          </div>
-        } />
+        <Route path="/" element={<TransactionList />} />
+        <Route path="/add" element={<AddTransaction />} />
         <Route path="/charts" element={<Charts />} />
         <Route path="/registration" element={<Reg />} />
       </Routes>

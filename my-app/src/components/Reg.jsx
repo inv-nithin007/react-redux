@@ -19,11 +19,11 @@ function Reg() {
   const [showSuccess, setShowSuccess] = useState(false)
   const [imageError, setImageError] = useState('')
 
-  const { register, handleSubmit, formState: { errors }, watch } = useForm({
+  const { register, handleSubmit, watch } = useForm({
     defaultValues: {
-      name: '',
-      email: '',
-      phone: ''
+      firstName: '',
+      lastName: '',
+      gender: ''
     }
   })
 
@@ -66,7 +66,6 @@ function Reg() {
   }
 
   const onSubmit = (data) => {
-   
     setShowSuccess(true)
     setTimeout(() => {
       setShowSuccess(false)
@@ -79,48 +78,31 @@ function Reg() {
         return (
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
             <TextField
-              {...register('name', {
-                required: 'Name is required',
-                minLength: {
-                  value: 2,
-                  message: 'Name must be at least 2 characters'
-                }
-              })}
+              {...register('firstName')}
               fullWidth
-              label="Name"
-              error={!!errors.name}
-              helperText={errors.name?.message}
+              label="First Name"
               sx={{ '.MuiOutlinedInput-root': { borderRadius: 3 } }}
             />
             <TextField
-              {...register('email', {
-                required: 'Email is required',
-                pattern: {
-                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: 'Invalid email address'
-                }
-              })}
+              {...register('lastName')}
               fullWidth
-              label="Email"
-              type="email"
-              error={!!errors.email}
-              helperText={errors.email?.message}
+              label="Last Name"
               sx={{ '.MuiOutlinedInput-root': { borderRadius: 3 } }}
             />
             <TextField
-              {...register('phone', {
-                required: 'Phone number is required',
-                pattern: {
-                  value: /^[+]?[\d\s\-()]{10,15}$/,
-                  message: 'Invalid phone number (10-15 digits)'
-                }
-              })}
+              {...register('gender')}
+              select
               fullWidth
-              label="Phone"
-              error={!!errors.phone}
-              helperText={errors.phone?.message}
+              label="Gender"
+              SelectProps={{ native: true }}
               sx={{ '.MuiOutlinedInput-root': { borderRadius: 3 } }}
-            />
+              InputLabelProps={{ shrink: true }}
+            >
+              <option value="">Select Gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+             
+            </TextField>
           </Box>
         )
       
@@ -157,14 +139,13 @@ function Reg() {
                 variant="contained"
                 sx={{ 
                   borderRadius: 4,
-                  px: 4,
-                  py: 2
+          
                 }}
               >
                 {selectedImage ? 'Change Image' : 'Choose Image'}
                 <input
                   type="file"
-                  accept="image/*"
+                
                   onChange={handleImageUpload}
                   style={{ display: 'none' }}
                 />
@@ -177,8 +158,7 @@ function Reg() {
                   onClick={handleRemoveImage}
                   sx={{ 
                     borderRadius: 4,
-                    px: 3,
-                    py: 2
+                 
                   }}
                 >
                   Remove Image
@@ -209,9 +189,9 @@ function Reg() {
             
             <Paper elevation={3} sx={{ p: 3, borderRadius: 2, backgroundColor: '#f8f9fa' }}>
               <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 2 }}>Personal Information</Typography>
-              <Typography><strong>Name:</strong> {formData.name}</Typography>
-              <Typography><strong>Email:</strong> {formData.email}</Typography>
-              <Typography><strong>Phone:</strong> {formData.phone}</Typography>
+              <Typography><strong>First Name:</strong> {formData.firstName}</Typography>
+              <Typography><strong>Last Name:</strong> {formData.lastName}</Typography>
+              <Typography><strong>Gender:</strong> {formData.gender}</Typography>
             </Paper>
             
             {imagePreview && (
@@ -274,15 +254,12 @@ function Reg() {
         </Typography>
 
         <Stepper activeStep={activeStep} alternativeLabel sx={{ mb: 4 }}>
-          {steps.map(() => (
-            <Step >
-              <StepLabel 
+           {steps.map((label) => (
+    <Step>
+      <StepLabel>{label}</StepLabel>  
+    </Step>
+  ))}
 
-              >
-              
-              </StepLabel>
-            </Step>
-          ))}
         </Stepper>
 
         <Box sx={{ minHeight: 300, mb: 4 }}>
@@ -298,7 +275,7 @@ function Reg() {
             Back
           </Button>
           
-          {activeStep === steps.length - 1 ? (
+          {activeStep === 2 ? (
             <Button
               variant="contained"
               onClick={handleSubmit(onSubmit)}

@@ -11,7 +11,8 @@ import {
   IconButton,
   Button,
   TextField,
-  Pagination
+  Pagination,
+  Drawer
 } from '@mui/material'
 import {
   Edit,
@@ -19,7 +20,9 @@ import {
   TrendingUp,
   TrendingDown,
   Clear,
-  Download
+  Download,
+  Menu,
+  Close
 } from '@mui/icons-material'
 
 function TransactionList() {
@@ -29,6 +32,7 @@ function TransactionList() {
   const [editDialog, setEditDialog] = useState({ open: false })
   const [deleteDialog, setDeleteDialog] = useState({ open: false })
   const [currentTransaction, setCurrentTransaction] = useState(null)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
   const [filters, setFilters] = useState({
     category: '',
     fromDate: '',
@@ -40,6 +44,18 @@ function TransactionList() {
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm()
 
+  let totalIncome = 0
+  let totalExpense = 0
+
+  for (const transaction of transactions) {
+    if (transaction.amount > 0) {
+      totalIncome += transaction.amount
+    } else if (transaction.amount < 0) {
+      totalExpense += Math.abs(transaction.amount)
+    }
+  }
+
+  const netBalance = totalIncome - totalExpense
 
   const filteredTransactions = transactions.filter(transaction => {
     if (filters.Inco == "Income" && transaction.amount < 0) {
@@ -156,10 +172,133 @@ if (transactions.length === 0) {
 }
 
 return (
-  <Box sx={{ mt: 4, maxWidth: 600, mx: 'auto' }}>
-    <Typography variant="h4" sx={{ fontWeight: 600, mb: 3, textAlign: 'center' }}>
-      Your Transactions
-    </Typography>
+  <Box>
+    <IconButton
+      onClick={() => setSidebarOpen(true)}
+      sx={{
+        
+        
+        backgroundColor: '#2d41f7ff',
+        ':hover': {
+          backgroundColor: '#858080ff',
+        },
+        '.MuiSvgIcon-root': {
+          fontSize: '2rem',
+        },
+      }}
+    >
+      <Menu />
+    </IconButton>
+
+    <Box sx={{ mt: 1, maxWidth: 600, mx: 'auto' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+        <Typography variant="h4" sx={{ fontWeight: 600 }}>
+           Expense Tracker
+        </Typography>
+        <Button
+          variant="contained"
+          onClick={() => navigate('/add')}
+          sx={{
+            borderRadius: 3,
+            px: 3,
+            py: 1.5,
+            backgroundColor: '#1976d2',
+            fontWeight: 600
+          }}
+        >
+          + Add Transaction
+        </Button>
+      </Box>
+
+    <Drawer
+      anchor='left'
+      open={sidebarOpen}
+      onClose={() => setSidebarOpen(false)}
+      sx={{
+        '.MuiDrawer-paper': {
+          width: 300,
+          backgroundColor: '#f5f5f5',
+          borderRadius: '10px'
+        }
+      }}
+    >
+      <Box sx={{ p: 3 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+          <Typography variant="h5" sx={{ fontWeight: 600, color: '#1976d2' }}>
+             Quick Info
+          </Typography>
+          <IconButton onClick={() => setSidebarOpen(false)}>
+            <Close />
+          </IconButton>
+        </Box>
+
+        <Paper elevation={12} sx={{ p: 2, mb: 2, borderRadius: 2, backgroundColor: '#e8f5e8' }}>
+          <Typography variant="h6" sx={{ mb: 2, color: '#2e7d32', fontWeight: 1000 }}>
+            💰 Total Expenses
+          </Typography>
+          
+          <Box sx={{ mb: 1 }}>
+            <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between' }}>
+              <span style={{ color: '#2e7d32', fontWeight: 500 }}>Total Income:</span>
+              <span style={{ color: '#2e7d32', fontWeight: 600 }}>₹{totalIncome.toFixed(2)}</span>
+            </Typography>
+          </Box>
+          
+          <Box sx={{ mb: 1 }}>
+            <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between' }}>
+              <span style={{ color: '#d32f2f', fontWeight: 500 }}>Total Expenses:</span>
+              <span style={{ color: '#d32f2f', fontWeight: 600 }}>₹{totalExpense.toFixed(2)}</span>
+            </Typography>
+          </Box>
+          
+          <Box>
+            <Typography variant="body1" sx={{ display: 'flex', justifyContent: 'space-between', fontWeight: 600 }}>
+              <span style={{ color: netBalance >= 0 ? '#2e7d32' : '#d32f2f' }}>Net Balance:</span>
+              <span style={{ color: netBalance >= 0 ? '#2e7d32' : '#d32f2f' }}>
+                ₹{netBalance.toFixed(2)}
+              </span>
+            </Typography>
+          </Box>
+        </Paper>
+
+        <Paper elevation={9} sx={{ p: 2, mb: 2, borderRadius: 2, backgroundColor: '#fff3e0' }}>
+          <Typography variant="h6" sx={{ mb: 2, color: '#ef6c00', fontWeight: 600 }}>
+            Pie Chart
+          </Typography>
+          <Button
+            variant="contained"
+            fullWidth
+            onClick={() => navigate('/charts')}
+            sx={{
+              backgroundColor: '#ef6c00',
+              borderRadius: 2,
+              fontWeight: 600
+            }}
+          >
+            View Chart
+          </Button>
+        </Paper>
+
+        <Paper elevation={9} sx={{ p: 2, mb: 2, borderRadius: 2, backgroundColor: '#e3f2fd' }}>
+          <Typography variant="h6" sx={{ mb: 2, color: '#1976d2', fontWeight: 600 }}>
+            Registration
+          </Typography>
+          <Button
+            variant="contained"
+            fullWidth
+            onClick={() => navigate('/registration')}
+            sx={{
+              backgroundColor: '#1976d2',
+              borderRadius: 2,
+              fontWeight: 600
+            }}
+          >
+            Registration
+          </Button>
+        </Paper>
+
+      </Box>
+    </Drawer>
 
     <Box sx={{
       display: 'flex',
@@ -315,7 +454,8 @@ return (
         size="large"
       />
     </Box>
-
+    
+    </Box>
   </Box>
 )
 }
