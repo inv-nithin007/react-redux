@@ -144,10 +144,11 @@ function Reg() {
               >
                 {selectedImage ? 'Change Image' : 'Choose Image'}
                 <input
+                style={{ display: 'none' }}
                   type="file"
-                
+               accept="image/*"
                   onChange={handleImageUpload}
-                  style={{ display: 'none' }}
+                 
                 />
               </Button>
               
